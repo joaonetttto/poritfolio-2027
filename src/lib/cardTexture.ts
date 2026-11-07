@@ -3,10 +3,8 @@ import type { Card } from "@/data/portfolio";
 
 const MU = "#A9A69E", SO = "#D9D5CB", FG = "#F4F1EA", AC = "#FF5B2E";
 
-/** Desenha o card em um canvas (340x220 lógicos, 3x de resolução). */
-export function makeCardTexture(card: Card): CanvasTexture {
-  const k = document.createElement("canvas");
-  k.width = 1020; k.height = 660;
+/** Desenha o card no canvas (340x220 lógicos, 3x de resolução). `logo` é opcional (card de formação). */
+function paint(k: HTMLCanvasElement, card: Card, logo?: HTMLImageElement) {
   const x = k.getContext("2d")!;
   x.setTransform(3, 0, 0, 3, 0, 0);
   x.fillStyle = "#17171a"; x.fillRect(0, 0, 340, 220);
@@ -30,8 +28,14 @@ export function makeCardTexture(card: Card): CanvasTexture {
       t("Sobre mim", 20, 36, 13, MU); t(card.title, 20, 76, 28);
       L.forEach((l, j) => t(l, 20, 108 + j * 22, 14, SO, 500)); break;
     case "edu":
-      x.strokeStyle = FG; x.lineWidth = 2; x.strokeRect(20, 20, 84, 56);
-      t("ETEC", 32, 56, 26); t("(logo oficial)", 30, 92, 10, MU, 500);
+      if (logo) {
+        x.fillStyle = FG; x.fillRect(16, 16, 92, 64); // fundo claro para a logo aparecer bem
+        const sc = Math.min(84 / logo.width, 56 / logo.height), w = logo.width * sc, h = logo.height * sc;
+        x.drawImage(logo, 20 + (84 - w) / 2, 20 + (56 - h) / 2, w, h);
+      } else {
+        x.strokeStyle = FG; x.lineWidth = 2; x.strokeRect(20, 20, 84, 56);
+        t("ETEC", 32, 56, 26);
+      }
       t("Formação", 120, 36, 13, MU); t(T[0], 120, 62, 20); t(T[1] ?? "", 120, 86, 18);
       t(L[0] ?? "", 20, 140, 16, SO, 500); t(L[1] ?? "", 20, 166, 14, MU, 500); break;
     case "tech":
@@ -57,7 +61,18 @@ export function makeCardTexture(card: Card): CanvasTexture {
       t(card.title, 20, 36, 22); t(L[0] ?? "", 20, 62, 13, MU, 500);
       t(L[1] ?? "", 20, 110, 16, SO, 500); t(L[2] ?? "", 20, 140, 16, SO, 500); break;
   }
+}
+
+export function makeCardTexture(card: Card): CanvasTexture {
+  const k = document.createElement("canvas");
+  k.width = 1020; k.height = 660;
+  paint(k, card);
   const tex = new CanvasTexture(k);
   tex.anisotropy = 8;
+  if (card.image) { // imagem do card (ex.: logo): carrega e redesenha quando chegar
+    const img = new Image();
+    img.onload = () => { paint(k, card, img); tex.needsUpdate = true; };
+    img.src = card.image;
+  }
   return tex;
 }
