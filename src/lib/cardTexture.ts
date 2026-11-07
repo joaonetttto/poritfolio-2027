@@ -29,9 +29,8 @@ function paint(k: HTMLCanvasElement, card: Card, logo?: HTMLImageElement) {
       L.forEach((l, j) => t(l, 20, 108 + j * 22, 14, SO, 500)); break;
     case "edu":
       if (logo) {
-        x.fillStyle = FG; x.fillRect(16, 16, 92, 64); // fundo claro para a logo aparecer bem
         const sc = Math.min(84 / logo.width, 56 / logo.height), w = logo.width * sc, h = logo.height * sc;
-        x.drawImage(logo, 20 + (84 - w) / 2, 20 + (56 - h) / 2, w, h);
+        x.drawImage(logo, 20, 20 + (56 - h) / 2, w, h);
       } else {
         x.strokeStyle = FG; x.lineWidth = 2; x.strokeRect(20, 20, 84, 56);
         t("ETEC", 32, 56, 26);
