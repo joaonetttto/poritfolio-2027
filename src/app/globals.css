@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+:root { --bg: #0b0b0c; --fg: #F4F1EA; }
+html { background: var(--bg); color-scheme: dark; }
+body { background: var(--bg); color: var(--fg); margin: 0; font-family: var(--font-sans), system-ui, sans-serif; }
+
+@keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
