@@ -35,7 +35,14 @@ export type Card = {
   note?: string; // aviso curto no painel
 };
 
-export const techIcons = ["Py", "SQL", "Next", "React", "TW"];
+// Cubos do card "O que eu uso": uma face com a imagem, outra com o nome.
+export const techs = [
+  { name: "Python", icon: "/logos/python.webp" },
+  { name: "SQL", icon: "/logos/sql.webp" },
+  { name: "Next.js", icon: "/logos/next.webp" },
+  { name: "React", icon: "/logos/react.webp" },
+  { name: "Tailwind", icon: "/logos/tailwind.jpg" },
+];
 
 export const cards: Card[] = [
   { kind: "about", caption: "sobre mim", title: "João Renato",

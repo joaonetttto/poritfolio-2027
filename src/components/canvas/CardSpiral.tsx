@@ -1,32 +1,31 @@
 "use client";
 import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { CanvasTexture, Color, DoubleSide, EdgesGeometry, Group, PlaneGeometry } from "three";
-import { cards, techIcons } from "@/data/portfolio";
+import { Color, DoubleSide, EdgesGeometry, Group, PlaneGeometry } from "three";
+import { cards, techs } from "@/data/portfolio";
 import { makeCardTexture } from "@/lib/cardTexture";
+import { makeTechFaces } from "@/lib/techTextures";
 import { panel } from "@/lib/panel";
 import { O, cardPos } from "@/lib/timeline";
 
-/** Cubos 3D girando na frente do card "O que eu uso" (trocar por logos reais depois). */
+/** Cubos 3D girando na frente do card "O que eu uso": faces com a imagem alternando com faces com o nome. */
 function TechCubes() {
-  const g = useRef<Group>(null!);
-  const tex = useMemo(() => techIcons.map((label, j) => {
-    const c = document.createElement("canvas"); c.width = c.height = 128;
-    const y = c.getContext("2d")!;
-    y.fillStyle = "#26262b"; y.fillRect(0, 0, 128, 128);
-    y.strokeStyle = j % 2 ? "#FF5B2E" : "#F4F1EA"; y.lineWidth = 8; y.strokeRect(4, 4, 120, 120);
-    y.fillStyle = "#F4F1EA"; y.font = `700 ${label.length > 3 ? 32 : 46}px Arial`; y.textAlign = "center";
-    y.fillText(label, 64, label.length > 3 ? 76 : 80);
-    return new CanvasTexture(c);
-  }), []);
-  useFrame(({ clock }) => g.current.children.forEach((m, j) => {
+  const g = useRef<Group>(null);
+  const faces = useMemo(() => techs.map(makeTechFaces), []);
+  useFrame(({ clock }) => g.current?.children.forEach((m, j) => {
     m.rotation.y += 0.012; m.rotation.x = Math.sin(clock.elapsedTime * 1.1 + j) * 0.35;
   }));
   return (
     <group ref={g}>
-      {tex.map((t, j) => (
-        <mesh key={j} position={[-1.2 + j * 0.6, -0.3, 0.45]}>
-          <boxGeometry args={[0.5, 0.5, 0.5]} /><meshBasicMaterial map={t} />
+      {faces.map((f, j) => (
+        <mesh key={j} position={[-1.24 + j * 0.62, -0.3, 0.45]}>
+          <boxGeometry args={[0.56, 0.56, 0.56]} />
+          <meshBasicMaterial attach="material-0" map={f.nameTex} />
+          <meshBasicMaterial attach="material-1" map={f.nameTex} />
+          <meshBasicMaterial attach="material-2" color="#26262b" />
+          <meshBasicMaterial attach="material-3" color="#26262b" />
+          <meshBasicMaterial attach="material-4" map={f.iconTex} />
+          <meshBasicMaterial attach="material-5" map={f.iconTex} />
         </mesh>
       ))}
     </group>
