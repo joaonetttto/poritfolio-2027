@@ -26,6 +26,11 @@ export type Card = {
   lines?: string[];
   chips?: string[];
   image?: string; // caminho em /public (ex.: "/logos/etec.png")
+  cover?: string; // capa do projeto (imagem em /public)
+  description?: string; // texto completo (aparece no painel ao clicar)
+  stack?: string[]; // tecnologias completas do projeto
+  link?: { label: string; href: string }; // botão do painel (site ou GitHub)
+  video?: string; // link de incorporação do vídeo (ex.: YouTube "não listado")
 };
 
 export const techIcons = ["Py", "SQL", "Next", "React", "TW"];
@@ -38,9 +43,32 @@ export const cards: Card[] = [
   { kind: "tech", caption: "o que eu uso", title: "O que eu uso",
     lines: ["Python · SQL · Next.js · React · Tailwind"] },
   { kind: "title", caption: "meus 3 principais projetos", title: "Meus 3|principais|projetos" },
-  { kind: "project", caption: "projeto 01", title: "Projeto 01", lines: ["Descrição curta do sistema."], chips: ["Next.js", "Python", "SQL"] },
-  { kind: "project", caption: "projeto 02", title: "Projeto 02", lines: ["Descrição curta do sistema."], chips: ["Next.js", "Python", "SQL"] },
-  { kind: "project", caption: "projeto 03", title: "Projeto 03", lines: ["Descrição curta do sistema."], chips: ["Next.js", "Python", "SQL"] },
+  {
+    kind: "project", caption: "TechRumo", title: "TechRumo",
+    lines: ["Roadmaps de estudo personalizados"], chips: ["React", "TypeScript", "Supabase"],
+    cover: "/logos/techrumo.png",
+    description:
+      "TechRumo é uma plataforma que gera roadmaps de estudo personalizados para quem quer entrar em tecnologia. A pessoa responde a um quiz rápido e recebe uma trilha com cursos selecionados, com acompanhamento de progresso e pagamento via Pix.",
+    stack: ["React", "TypeScript", "Supabase", "Asaas", "Cloudflare Turnstile", "Lovable"],
+    link: { label: "Visitar o site", href: "https://techrumo.com/" },
+  },
+  {
+    kind: "project", caption: "ClinicaPro", title: "ClinicaPro",
+    lines: ["Gestão de clínicas médicas · TCC"], chips: ["React", "TypeScript", "Supabase"],
+    cover: "/logos/clicinicapro.png",
+    description:
+      "ClinicaPro é um sistema web de gestão de clínicas médicas que reúne pacientes, agenda, prontuário eletrônico, serviços, financeiro e relatórios em um só lugar. Cada clínica tem seus dados isolados, e o acesso é por perfil (administrador, médico e recepcionista). Entre os recursos de segurança estão o log de auditoria dos prontuários, o logout por inatividade e o CPF mascarado. Foi o meu TCC do curso técnico em Desenvolvimento de Sistemas.",
+    stack: ["React", "TypeScript", "Tailwind CSS", "Supabase (PostgreSQL, autenticação e RLS)", "Lovable"],
+    // video: "cole aqui o link de incorporação do vídeo (ex.: https://www.youtube.com/embed/ID)",
+  },
+  {
+    kind: "project", caption: "Clínica psiquiátrica", title: "Clínica psiquiátrica",
+    lines: ["Landing page · sistema em Node"], chips: ["Node.js", "Landing page"],
+    cover: "/logos/clinicapsquiatrica.png",
+    description: "Landing page simples de uma clínica psiquiátrica, com sistema desenvolvido em Node.",
+    stack: ["Node.js"],
+    link: { label: "Ver no GitHub", href: "https://github.com/joaonetttto/clinica-medica" },
+  },
   { kind: "social", caption: "conteúdo", title: "Conteúdo", lines: ["humor e informativo", "minhas redes sociais"] },
   { kind: "contact", caption: "contato", title: "Contato", lines: ["vamos conversar?", "e-mail: seu e-mail aqui", "redes: seus @ aqui"] },
 ];
