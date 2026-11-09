@@ -100,9 +100,9 @@ export const cards: Card[] = [
     email: "", // coloque seu e-mail aqui, entre aspas
     socials: [
       { name: "GitHub", href: "https://github.com/joaonetttto", icon: "/logos/github.webp" },
-      { name: "Instagram", href: "", icon: "/logos/instagram.avif" },
-      { name: "TikTok", href: "", icon: "/logos/tiktok.webp" },
-      { name: "LinkedIn", href: "", icon: "/logos/linkedin.avif" },
+      { name: "Instagram", href: "https://www.instagram.com/neto_odev?cplk=NXZuZDl1ZWRqc2dm&utm_source=qr", icon: "/logos/instagram.avif" },
+      { name: "TikTok", href: "https://www.tiktok.com/@netoodev?_r=1&_t=ZS-9AT511AMyhg", icon: "/logos/tiktok.webp" },
+      { name: "LinkedIn", href: "https://www.linkedin.com/in/jo%C3%A3o-renato-neto-85a8522a0/", icon: "/logos/linkedin.avif" },
     ],
   },
 ];
