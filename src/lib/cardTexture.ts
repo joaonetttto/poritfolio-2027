@@ -4,7 +4,7 @@ import type { Card } from "@/data/portfolio";
 const MU = "#A9A69E", SO = "#D9D5CB", FG = "#F4F1EA", AC = "#FF5B2E";
 
 /** Desenha o card no canvas (340x220 lógicos, 3x de resolução). `logo` (imagem do card: logo da formação ou foto do "Sobre mim") e `cover` (projetos) são opcionais. */
-function paint(k: HTMLCanvasElement, card: Card, logo?: HTMLImageElement, cover?: HTMLImageElement) {
+function paint(k: HTMLCanvasElement, card: Card, logo?: HTMLImageElement, cover?: HTMLImageElement, icons?: (HTMLImageElement | undefined)[]) {
   const x = k.getContext("2d")!;
   x.setTransform(3, 0, 0, 3, 0, 0);
   x.fillStyle = "#17171a"; x.fillRect(0, 0, 340, 220);
@@ -62,14 +62,23 @@ function paint(k: HTMLCanvasElement, card: Card, logo?: HTMLImageElement, cover?
       }
       t(card.title, 20, 142, 20); t(L[0] ?? "", 20, 162, 12, MU, 500);
       { let cx = 20; (card.chips ?? []).forEach((c) => (cx = chip(c, cx, 170))); } break;
-    case "social":
+    case "social": {
       t(card.title, 20, 36, 22); t(L[0] ?? "", 20, 62, 13, MU, 500);
-      [0, 1, 2].forEach((j) => { x.beginPath(); x.arc(50 + j * 70, 122, 26, 0, 6.283);
-        x.strokeStyle = j === 1 ? AC : FG; x.lineWidth = 2; x.stroke(); t("@", 41 + j * 70, 131, 24); });
+      let n = 0; // só desenha as redes que têm link preenchido
+      (card.socials ?? []).forEach((sc, idx) => {
+        if (!sc.href) return;
+        const cx = 50 + n * 70; n++;
+        x.beginPath(); x.arc(cx, 122, 26, 0, 6.283); x.fillStyle = FG; x.fill();
+        x.strokeStyle = n % 2 ? FG : AC; x.lineWidth = 2; x.stroke();
+        const im = icons?.[idx];
+        if (im) { const f = Math.min(38 / im.width, 38 / im.height); x.drawImage(im, cx - (im.width * f) / 2, 122 - (im.height * f) / 2, im.width * f, im.height * f); }
+      });
       t(L[1] ?? "", 20, 180, 12, MU, 500); break;
+    }
     case "contact":
       t(card.title, 20, 36, 22); t(L[0] ?? "", 20, 62, 13, MU, 500);
-      t(L[1] ?? "", 20, 110, 16, SO, 500); t(L[2] ?? "", 20, 140, 16, SO, 500); break;
+      if (card.email) t(card.email, 20, 110, 16, SO, 500);
+      t(L[1] ?? "", 20, card.email ? 140 : 110, 14, MU, 500); break;
   }
 }
 
@@ -81,13 +90,15 @@ export function makeCardTexture(card: Card): CanvasTexture {
   tex.anisotropy = 8;
   // Imagens carregam depois; a cada uma que chega, o card é redesenhado.
   const imgs: { logo?: HTMLImageElement; cover?: HTMLImageElement } = {};
-  const load = (src: string | undefined, key: "logo" | "cover") => {
+  const icons: (HTMLImageElement | undefined)[] = [];
+  const load = (src: string | undefined, set: (i: HTMLImageElement) => void) => {
     if (!src) return;
     const img = new Image();
-    img.onload = () => { imgs[key] = img; paint(k, card, imgs.logo, imgs.cover); tex.needsUpdate = true; };
+    img.onload = () => { set(img); paint(k, card, imgs.logo, imgs.cover, icons); tex.needsUpdate = true; };
     img.src = src;
   };
-  load(card.image, "logo");
-  load(card.cover, "cover");
+  load(card.image, (i) => { imgs.logo = i; });
+  load(card.cover, (i) => { imgs.cover = i; });
+  card.socials?.forEach((sc, idx) => { if (sc.href) load(sc.icon, (i) => { icons[idx] = i; }); });
   return tex;
 }

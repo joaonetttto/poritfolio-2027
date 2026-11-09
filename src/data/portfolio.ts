@@ -33,6 +33,8 @@ export type Card = {
   link?: { label: string; href: string }; // botão do painel (site ou GitHub)
   video?: string; // link do vídeo no YouTube (pode ser "não listado")
   note?: string; // aviso curto no painel
+  socials?: { name: string; href: string; icon: string }[]; // redes (só aparecem as que têm href)
+  email?: string; // e-mail de contato (vazio = não aparece)
 };
 
 // Cubos do card "O que eu uso": uma face com a imagem, outra com o nome.
@@ -79,6 +81,28 @@ export const cards: Card[] = [
     stack: ["Node.js"],
     link: { label: "Ver no GitHub", href: "https://github.com/joaonetttto/clinica-medica" },
   },
-  { kind: "social", caption: "conteúdo", title: "Conteúdo", lines: ["humor e informativo", "minhas redes sociais"] },
-  { kind: "contact", caption: "contato", title: "Contato", lines: ["vamos conversar?", "e-mail: seu e-mail aqui", "redes: seus @ aqui"] },
+  {
+    kind: "social", caption: "conteúdo", title: "Conteúdo",
+    lines: ["humor e informativo", "minhas redes sociais"],
+    description: "Eu produzo conteúdo de humor e informativo para as redes sociais. Me acompanhe por lá!",
+    // Preencha o href de cada rede; as que ficarem vazias não aparecem no site.
+    socials: [
+      { name: "GitHub", href: "https://github.com/joaonetttto", icon: "/logos/github.webp" },
+      { name: "Instagram", href: "", icon: "/logos/instagram.avif" },
+      { name: "TikTok", href: "", icon: "/logos/tiktok.webp" },
+      { name: "LinkedIn", href: "", icon: "/logos/linkedin.avif" },
+    ],
+  },
+  {
+    kind: "contact", caption: "contato", title: "Contato",
+    lines: ["vamos conversar?", "clique para ver as formas de contato"],
+    description: "Quer conversar sobre um projeto, uma vaga ou só trocar uma ideia? Me chame por e-mail ou por qualquer uma das redes.",
+    email: "", // coloque seu e-mail aqui, entre aspas
+    socials: [
+      { name: "GitHub", href: "https://github.com/joaonetttto", icon: "/logos/github.webp" },
+      { name: "Instagram", href: "", icon: "/logos/instagram.avif" },
+      { name: "TikTok", href: "", icon: "/logos/tiktok.webp" },
+      { name: "LinkedIn", href: "", icon: "/logos/linkedin.avif" },
+    ],
+  },
 ];

@@ -26,6 +26,7 @@ export default function DetailPanel() {
   if (i === null) return null;
   const c = cards[i];
   const title = c.title.replace("|", " ");
+  const socials = (c.socials ?? []).filter((x) => x.href);
 
   return (
     <div
@@ -61,6 +62,27 @@ export default function DetailPanel() {
                 ))}
               </div>
             </div>
+          )}
+
+          {socials.length > 0 && (
+            <div>
+              <div className="mb-2 text-xs uppercase tracking-[0.18em] text-[#A9A69E]">Redes</div>
+              <div className="flex flex-wrap gap-3">
+                {socials.map((x) => (
+                  <a key={x.name} href={x.href} target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-2 rounded-full border border-[#F4F1EA]/40 px-4 py-2 hover:bg-white/10">
+                    <Image src={x.icon} alt="" width={24} height={24} className="h-6 w-6 rounded-full bg-[#F4F1EA] object-contain p-0.5" />
+                    {x.name}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+          {c.email && (
+            <a href={`mailto:${c.email}`}
+              className="inline-block rounded-full bg-[#FF5B2E] px-5 py-2.5 font-bold text-[#0b0b0c] hover:brightness-110">
+              {c.email}
+            </a>
           )}
 
           {c.video && (
