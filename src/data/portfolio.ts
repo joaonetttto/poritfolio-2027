@@ -1,3 +1,5 @@
+import { contact, socials } from "./socials";
+
 // Tudo que aparece no site fica aqui. Para atualizar o portfólio, edite só este arquivo.
 export const profile = {
   name: "João Renato",
@@ -85,24 +87,13 @@ export const cards: Card[] = [
     kind: "social", caption: "conteúdo", title: "Conteúdo",
     lines: ["humor e informativo", "minhas redes sociais"],
     description: "Eu produzo conteúdo de humor e informativo para as redes sociais. Me acompanhe por lá!",
-    // Preencha o href de cada rede; as que ficarem vazias não aparecem no site.
-    socials: [
-      { name: "GitHub", href: "https://github.com/joaonetttto", icon: "/logos/github.webp" },
-      { name: "Instagram", href: "", icon: "/logos/instagram.avif" },
-      { name: "TikTok", href: "", icon: "/logos/tiktok.webp" },
-      { name: "LinkedIn", href: "", icon: "/logos/linkedin.avif" },
-    ],
+    socials, // lista em data/socials.ts
   },
   {
     kind: "contact", caption: "contato", title: "Contato",
     lines: ["vamos conversar?", "clique para ver as formas de contato"],
     description: "Quer conversar sobre um projeto, uma vaga ou só trocar uma ideia? Me chame por e-mail ou por qualquer uma das redes.",
-    email: "", // coloque seu e-mail aqui, entre aspas
-    socials: [
-      { name: "GitHub", href: "https://github.com/joaonetttto", icon: "/logos/github.webp" },
-      { name: "Instagram", href: "https://www.instagram.com/neto_odev?cplk=NXZuZDl1ZWRqc2dm&utm_source=qr", icon: "/logos/instagram.avif" },
-      { name: "TikTok", href: "https://www.tiktok.com/@netoodev?_r=1&_t=ZS-9AT511AMyhg", icon: "/logos/tiktok.webp" },
-      { name: "LinkedIn", href: "https://www.linkedin.com/in/jo%C3%A3o-renato-neto-85a8522a0/", icon: "/logos/linkedin.avif" },
-    ],
+    email: contact.email,
+    socials: [{ name: "E-mail", href: `mailto:${contact.email}`, icon: contact.emailIcon }, ...socials],
   },
 ];

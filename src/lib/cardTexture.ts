@@ -21,6 +21,19 @@ function paint(k: HTMLCanvasElement, card: Card, logo?: HTMLImageElement, cover?
   };
   x.fillStyle = AC; x.fillRect(20, 196, 48, 4);
   const L = card.lines ?? [], T = card.title.split("|");
+  // Linha de ícones em círculos (redes e e-mail). Só desenha itens com link preenchido.
+  const iconRow = (y: number, r: number) => {
+    const list = (card.socials ?? []).map((sc, idx) => ({ sc, idx })).filter((o) => o.sc.href);
+    const gap = list.length > 4 ? 60 : 70;
+    list.forEach(({ sc, idx }, n) => {
+      const cx = 50 + n * gap;
+      x.beginPath(); x.arc(cx, y, r, 0, 6.283); x.fillStyle = FG; x.fill();
+      x.strokeStyle = n % 2 ? AC : FG; x.lineWidth = 2; x.stroke();
+      const im = icons?.[idx];
+      if (im) { const f = Math.min((r * 1.45) / im.width, (r * 1.45) / im.height); x.drawImage(im, cx - (im.width * f) / 2, y - (im.height * f) / 2, im.width * f, im.height * f); }
+      else t(sc.name[0], cx - 7, y + 8, 22, "#17171a");
+    });
+  };
   switch (card.kind) {
     case "about":
       x.beginPath(); x.arc(276, 62, 42, 0, 6.283); x.fillStyle = "#2a2a2e"; x.fill();
@@ -62,23 +75,15 @@ function paint(k: HTMLCanvasElement, card: Card, logo?: HTMLImageElement, cover?
       }
       t(card.title, 20, 142, 20); t(L[0] ?? "", 20, 162, 12, MU, 500);
       { let cx = 20; (card.chips ?? []).forEach((c) => (cx = chip(c, cx, 170))); } break;
-    case "social": {
+    case "social":
       t(card.title, 20, 36, 22); t(L[0] ?? "", 20, 62, 13, MU, 500);
-      let n = 0; // só desenha as redes que têm link preenchido
-      (card.socials ?? []).forEach((sc, idx) => {
-        if (!sc.href) return;
-        const cx = 50 + n * 70; n++;
-        x.beginPath(); x.arc(cx, 122, 26, 0, 6.283); x.fillStyle = FG; x.fill();
-        x.strokeStyle = n % 2 ? FG : AC; x.lineWidth = 2; x.stroke();
-        const im = icons?.[idx];
-        if (im) { const f = Math.min(38 / im.width, 38 / im.height); x.drawImage(im, cx - (im.width * f) / 2, 122 - (im.height * f) / 2, im.width * f, im.height * f); }
-      });
+      iconRow(122, 26);
       t(L[1] ?? "", 20, 180, 12, MU, 500); break;
-    }
     case "contact":
       t(card.title, 20, 36, 22); t(L[0] ?? "", 20, 62, 13, MU, 500);
-      if (card.email) t(card.email, 20, 110, 16, SO, 500);
-      t(L[1] ?? "", 20, card.email ? 140 : 110, 14, MU, 500); break;
+      iconRow(116, 24);
+      if (card.email) t(card.email, 20, 172, 14, SO, 500); else t(L[1] ?? "", 20, 172, 13, MU, 500);
+      break;
   }
 }
 

@@ -26,7 +26,7 @@ export default function DetailPanel() {
   if (i === null) return null;
   const c = cards[i];
   const title = c.title.replace("|", " ");
-  const socials = (c.socials ?? []).filter((x) => x.href);
+  const socials = (c.socials ?? []).filter((x) => x.href && !x.href.startsWith("mailto:"));
 
   return (
     <div
