@@ -30,7 +30,8 @@ export type Card = {
   description?: string; // texto completo (aparece no painel ao clicar)
   stack?: string[]; // tecnologias completas do projeto
   link?: { label: string; href: string }; // botão do painel (site ou GitHub)
-  video?: string; // link de incorporação do vídeo (ex.: YouTube "não listado")
+  video?: string; // link do vídeo no YouTube (pode ser "não listado")
+  note?: string; // aviso curto no painel
 };
 
 export const techIcons = ["Py", "SQL", "Next", "React", "TW"];
@@ -59,7 +60,8 @@ export const cards: Card[] = [
     description:
       "ClinicaPro é um sistema web de gestão de clínicas médicas que reúne pacientes, agenda, prontuário eletrônico, serviços, financeiro e relatórios em um só lugar. Cada clínica tem seus dados isolados, e o acesso é por perfil (administrador, médico e recepcionista). Entre os recursos de segurança estão o log de auditoria dos prontuários, o logout por inatividade e o CPF mascarado. Foi o meu TCC do curso técnico em Desenvolvimento de Sistemas.",
     stack: ["React", "TypeScript", "Tailwind CSS", "Supabase (PostgreSQL, autenticação e RLS)", "Lovable"],
-    // video: "cole aqui o link de incorporação do vídeo (ex.: https://www.youtube.com/embed/ID)",
+    // video: "https://www.youtube.com/watch?v=COLE_O_ID_AQUI",
+    note: "O sistema exige login, então a demonstração é em vídeo (em breve).",
   },
   {
     kind: "project", caption: "Clínica psiquiátrica", title: "Clínica psiquiátrica",

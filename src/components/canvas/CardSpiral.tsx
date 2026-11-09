@@ -4,6 +4,7 @@ import { useFrame } from "@react-three/fiber";
 import { CanvasTexture, Color, DoubleSide, EdgesGeometry, Group, PlaneGeometry } from "three";
 import { cards, techIcons } from "@/data/portfolio";
 import { makeCardTexture } from "@/lib/cardTexture";
+import { panel } from "@/lib/panel";
 import { O, cardPos } from "@/lib/timeline";
 
 /** Cubos 3D girando na frente do card "O que eu uso" (trocar por logos reais depois). */
@@ -44,7 +45,14 @@ export default function CardSpiral() {
         const edge = new Color("#F4F1EA").lerp(new Color("#FF5B2E"), i / cards.length);
         return (
           <group key={i} position={p} ref={(g) => { g?.lookAt(O.x, p.y, O.z); }}>
-            <mesh geometry={planeGeo}><meshBasicMaterial map={textures[i]} side={DoubleSide} /></mesh>
+            <mesh
+              geometry={planeGeo}
+              onClick={c.description ? (e) => { e.stopPropagation(); panel.set(i); } : undefined}
+              onPointerOver={c.description ? () => { document.body.style.cursor = "pointer"; } : undefined}
+              onPointerOut={c.description ? () => { document.body.style.cursor = ""; } : undefined}
+            >
+              <meshBasicMaterial map={textures[i]} side={DoubleSide} />
+            </mesh>
             <lineSegments geometry={edgeGeo}><lineBasicMaterial color={edge} /></lineSegments>
             {c.kind === "tech" && <TechCubes />}
           </group>

@@ -1,6 +1,7 @@
 import ScrollProvider from "@/components/ScrollProvider";
 import ExperienceLoader from "@/components/canvas/ExperienceLoader";
 import Hud from "@/components/ui/Hud";
+import DetailPanel from "@/components/ui/DetailPanel";
 import { cards, profile } from "@/data/portfolio";
 
 export default function Home() {
@@ -9,6 +10,7 @@ export default function Home() {
       <ScrollProvider />
       <ExperienceLoader />
       <Hud />
+      <DetailPanel />
       {/* Esta altura é o "trilho" do scroll: quanto maior, mais lenta a viagem. */}
       <main style={{ height: "1000vh" }}>
         {/* Conteúdo em texto normal: bom para Google e leitores de tela. */}
