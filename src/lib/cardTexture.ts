@@ -3,8 +3,8 @@ import type { Card } from "@/data/portfolio";
 
 const MU = "#A9A69E", SO = "#D9D5CB", FG = "#F4F1EA", AC = "#FF5B2E";
 
-/** Desenha o card no canvas (340x220 lógicos, 3x de resolução). `logo` é opcional (card de formação). */
-function paint(k: HTMLCanvasElement, card: Card, logo?: HTMLImageElement) {
+/** Desenha o card no canvas (340x220 lógicos, 3x de resolução). `logo` (formação) e `cover` (projetos) são opcionais. */
+function paint(k: HTMLCanvasElement, card: Card, logo?: HTMLImageElement, cover?: HTMLImageElement) {
   const x = k.getContext("2d")!;
   x.setTransform(3, 0, 0, 3, 0, 0);
   x.fillStyle = "#17171a"; x.fillRect(0, 0, 340, 220);
@@ -44,11 +44,17 @@ function paint(k: HTMLCanvasElement, card: Card, logo?: HTMLImageElement) {
       t("3", 250, 160, 170, "rgba(244,241,234,.14)"); break;
     case "project":
       x.fillStyle = "#26262b"; x.fillRect(16, 16, 308, 100);
-      x.fillStyle = "#17171a"; x.fillRect(16, 16, 308, 16);
-      [AC, FG, MU].forEach((c, j) => { x.beginPath(); x.arc(28 + j * 12, 24, 3, 0, 6.283); x.fillStyle = c; x.fill(); });
-      x.fillStyle = "#34343a"; x.fillRect(28, 44, 120, 10); x.fillRect(28, 62, 200, 8);
-      x.fillRect(28, 76, 160, 8); x.fillRect(240, 44, 70, 60);
-      t("foto da cara do sistema", 100, 108, 10, MU, 500);
+      if (cover) { // capa preenchendo o retângulo, alinhada ao topo
+        const sc = Math.max(308 / cover.width, 100 / cover.height), w = cover.width * sc, h = cover.height * sc;
+        x.save(); x.beginPath(); x.rect(16, 16, 308, 100); x.clip();
+        x.drawImage(cover, 16 + (308 - w) / 2, 16, w, h); x.restore();
+      } else {
+        x.fillStyle = "#17171a"; x.fillRect(16, 16, 308, 16);
+        [AC, FG, MU].forEach((c, j) => { x.beginPath(); x.arc(28 + j * 12, 24, 3, 0, 6.283); x.fillStyle = c; x.fill(); });
+        x.fillStyle = "#34343a"; x.fillRect(28, 44, 120, 10); x.fillRect(28, 62, 200, 8);
+        x.fillRect(28, 76, 160, 8); x.fillRect(240, 44, 70, 60);
+        t("foto da cara do sistema", 100, 108, 10, MU, 500);
+      }
       t(card.title, 20, 142, 20); t(L[0] ?? "", 20, 162, 12, MU, 500);
       { let cx = 20; (card.chips ?? []).forEach((c) => (cx = chip(c, cx, 170))); } break;
     case "social":
@@ -68,10 +74,15 @@ export function makeCardTexture(card: Card): CanvasTexture {
   paint(k, card);
   const tex = new CanvasTexture(k);
   tex.anisotropy = 8;
-  if (card.image) { // imagem do card (ex.: logo): carrega e redesenha quando chegar
+  // Imagens carregam depois; a cada uma que chega, o card é redesenhado.
+  const imgs: { logo?: HTMLImageElement; cover?: HTMLImageElement } = {};
+  const load = (src: string | undefined, key: "logo" | "cover") => {
+    if (!src) return;
     const img = new Image();
-    img.onload = () => { paint(k, card, img); tex.needsUpdate = true; };
-    img.src = card.image;
-  }
+    img.onload = () => { imgs[key] = img; paint(k, card, imgs.logo, imgs.cover); tex.needsUpdate = true; };
+    img.src = src;
+  };
+  load(card.image, "logo");
+  load(card.cover, "cover");
   return tex;
 }
