@@ -3,7 +3,7 @@
 
 export const contact = {
   email: "joaorenatoneto.dev@gmail.com",
-  emailIcon: "/logos/gmail.png", // salve a imagem do Gmail em public/logos com esse nome (ou troque a extensão aqui)
+  emailIcon: "/logos/gmail.jpg", // salve a imagem do Gmail em public/logos com esse nome (ou troque a extensão aqui)
 };
 
 export const socials = [
@@ -12,3 +12,4 @@ export const socials = [
   { name: "TikTok", href: "", icon: "/logos/tiktok.webp" }, // ex.: "https://tiktok.com/@seu_usuario"
   { name: "LinkedIn", href: "", icon: "/logos/linkedin.avif" }, // ex.: "https://linkedin.com/in/seu-usuario"
 ];
+
