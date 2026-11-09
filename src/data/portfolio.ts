@@ -25,7 +25,8 @@ export type Card = {
   title: string; // use "|" para quebrar linha
   lines?: string[];
   chips?: string[];
-  image?: string; // caminho em /public (ex.: "/logos/etec.png")
+  image?: string; // caminho em /public (logo da formação ou foto do "Sobre mim")
+  imageFocusY?: number; // foto redonda: 0 = topo da imagem, 1 = base (padrão 0.3)
   cover?: string; // capa do projeto (imagem em /public)
   description?: string; // texto completo (aparece no painel ao clicar)
   stack?: string[]; // tecnologias completas do projeto
@@ -38,7 +39,7 @@ export const techIcons = ["Py", "SQL", "Next", "React", "TW"];
 
 export const cards: Card[] = [
   { kind: "about", caption: "sobre mim", title: "João Renato",
-    lines: ["Full stack developer", "São José dos Campos", "Técnico em desenv. de sistemas", "Quero cursar eng. de software"] },
+    lines: ["Full stack developer", "São José dos Campos", "Técnico em desenv. de sistemas", "Quero cursar eng. de software"], image: "/logos/minha-foto.jpeg" },
   { kind: "edu", caption: "formação", title: "Técnico em|Desenv. de Sistemas",
     lines: ["Curso técnico · ETEC", "Formatura prevista: dez/2026"], image: "/logos/etec.png" },
   { kind: "tech", caption: "o que eu uso", title: "O que eu uso",

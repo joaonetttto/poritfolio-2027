@@ -3,7 +3,7 @@ import type { Card } from "@/data/portfolio";
 
 const MU = "#A9A69E", SO = "#D9D5CB", FG = "#F4F1EA", AC = "#FF5B2E";
 
-/** Desenha o card no canvas (340x220 lógicos, 3x de resolução). `logo` (formação) e `cover` (projetos) são opcionais. */
+/** Desenha o card no canvas (340x220 lógicos, 3x de resolução). `logo` (imagem do card: logo da formação ou foto do "Sobre mim") e `cover` (projetos) são opcionais. */
 function paint(k: HTMLCanvasElement, card: Card, logo?: HTMLImageElement, cover?: HTMLImageElement) {
   const x = k.getContext("2d")!;
   x.setTransform(3, 0, 0, 3, 0, 0);
@@ -24,7 +24,12 @@ function paint(k: HTMLCanvasElement, card: Card, logo?: HTMLImageElement, cover?
   switch (card.kind) {
     case "about":
       x.beginPath(); x.arc(276, 62, 42, 0, 6.283); x.fillStyle = "#2a2a2e"; x.fill();
-      x.strokeStyle = AC; x.lineWidth = 3; x.stroke(); t("sua foto", 252, 66, 11, MU, 500);
+      if (logo) { // foto redonda: preenche o círculo; imageFocusY (0 a 1) escolhe qual parte da altura aparece
+        const sc = Math.max(84 / logo.width, 84 / logo.height), w = logo.width * sc, h = logo.height * sc;
+        x.save(); x.beginPath(); x.arc(276, 62, 42, 0, 6.283); x.clip();
+        x.drawImage(logo, 276 - w / 2, 20 - (h - 84) * (card.imageFocusY ?? 0.3), w, h); x.restore();
+      } else t("sua foto", 252, 66, 11, MU, 500);
+      x.beginPath(); x.arc(276, 62, 42, 0, 6.283); x.strokeStyle = AC; x.lineWidth = 3; x.stroke();
       t("Sobre mim", 20, 36, 13, MU); t(card.title, 20, 76, 28);
       L.forEach((l, j) => t(l, 20, 108 + j * 22, 14, SO, 500)); break;
     case "edu":
